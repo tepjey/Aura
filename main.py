@@ -1,5 +1,4 @@
 import streamlit as st
-import pyttsx3
 from PIL import Image
 from datetime import datetime, timedelta
 from auth import authenticate_user
