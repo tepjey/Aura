@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from auth import authenticate_user
+import streamlit as st
 
 def fetch_upcoming_events(max_results=10):
     try:
@@ -47,3 +48,31 @@ if __name__ == "__main__":
         print(f"{date}:")
         for task in tasks:
             print(f"  - {task}")
+
+def display_study_timetable():
+    st.header("Study Timetable")
+    
+    st.info("Fetching upcoming events from your Google Calendar...")
+    
+    try:
+        # Fetch upcoming events
+        events = fetch_upcoming_events()
+        
+        if not events:
+            st.warning("No upcoming events found!")
+            return
+        
+        # Create study timetable
+        timetable = create_study_timetable(events)
+        
+        if not timetable:
+            st.warning("Unable to generate timetable!")
+            return
+        
+        # Display timetable
+        for date, tasks in sorted(timetable.items()):
+            st.subheader(f"{date.strftime('%A, %d %B %Y')}")
+            for task in tasks:
+                st.write(f"• {task}")
+    except Exception as e:
+        st.error(f"An error occurred: {e}")
